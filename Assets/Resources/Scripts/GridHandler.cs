@@ -22,7 +22,7 @@ public class GridHandler : MonoBehaviour
 
     public Block At(int posX, int posY)
     {
-        return grid[posX, posY];
+        return IsOnBoard(posX, posY)?grid[posX, posY]:null;
     }
 
     private Block InstantiateBlock()
@@ -30,24 +30,27 @@ public class GridHandler : MonoBehaviour
         return Instantiate(Resources.Load("Prefabs/Block") as GameObject, transform).GetComponent<Block>();
     }
 
-    public bool IsOccupied(int posX, int posY)
-    {
-        if(posX<0 || posX >= grid.GetLength(0))
+    public bool IsOnBoard(int posX, int posY) {
+        if (posX < 0 || posX >= grid.GetLength(0))
         {
-            return true;
+            return false;
         }
 
         if (posY < 0 || posY >= grid.GetLength(1))
         {
-            return true;
+            return false;
         }
 
+        return true;
+    }
+    public bool IsOccupied(int posX, int posY)
+    {
         return At(posX, posY) != null;
     }
 
     public void NewBlock(int posX, int posY, int value)
     {
-        if (!IsOccupied(posX, posY))
+        if (IsOnBoard(posX, posY) && !IsOccupied(posX, posY))
         {
             Block newBlock = InstantiateBlock();
             newBlock.SetValue(value);
@@ -98,14 +101,14 @@ public class GridHandler : MonoBehaviour
             for (int y = dirY < 0 ? 0 : grid.GetLength(1) - 1; y >= 0 && y < grid.GetLength(1); y -= dirY!=0?dirY:1)
 
             {
-                if (IsOccupied(x, y))
+                if (IsOnBoard(x, y) && IsOccupied(x, y))
                 {
                     Block block = At(x, y);
                     int orginalX = x;
                     int orginalY = y;
                     int distance = 1;
 
-                    while(!IsOccupied(orginalX+dirX*distance, orginalY + dirY*distance))
+                    while(IsOnBoard(orginalX + dirX * distance, orginalY + dirY * distance) && !IsOccupied(orginalX+dirX*distance, orginalY + dirY*distance))
                     {
                         int newX = orginalX + dirX * distance;
                         int newY = orginalY + dirY * distance;
@@ -127,28 +130,35 @@ public class GridHandler : MonoBehaviour
         for (int x = dirX < 0 ? 0 : grid.GetLength(0) - 1; x >= 0 && x < grid.GetLength(0); x -= dirX != 0 ? dirX : 1)
         {
             for (int y = dirY < 0 ? 0 : grid.GetLength(1) - 1; y >= 0 && y < grid.GetLength(1); y -= dirY != 0 ? dirY : 1)
-
             {
-                //if (IsOccupied(x, y))
-                //{
-                //    Block block = At(x, y);
-                //    int orginalX = x;
-                //    int orginalY = y;
-                //    int distance = 1;
+                if (IsOccupied(x, y))
+                {
+                    Block block = At(x, y);
+                    int neighbourX = x - dirX;
+                    int neighbourY = y - dirY;
+                    int distance = 1;
+                    Block neighbour = null;
 
-                //    while (!IsOccupied(orginalX + dirX * -distance, orginalY + dirY * -distance))
-                //    {
-                //        int newX = orginalX + dirX * distance;
-                //        int newY = orginalY + dirY * distance;
-                //        int oldX = orginalX + dirX * (distance - 1);
-                //        int oldY = orginalY + dirY * (distance - 1);
-                //        distance++;
+                    while (IsOnBoard(neighbourX, neighbourY))
+                    {
+                        neighbour = At(neighbourX, neighbourY);
 
-                //        MoveBlock(oldX, oldY, newX, newY);
-                //        actionPerformed = true;
-                //    }
-
-                //}
+                        if (neighbour)
+                        {
+                            if (neighbour.value == block.value)
+                            {
+                                block.DoubleValue();
+                                neighbour.Dispose();
+                                grid[neighbourX, neighbourY] = null;
+                                actionPerformed = true;
+                            }
+                            break;
+                        }
+                        distance++;
+                        neighbourX = x - dirX * distance;
+                        neighbourY = y - dirY * distance;
+                    }
+                }
             }
         }
     }

@@ -28,4 +28,9 @@ public class Block : MonoBehaviour
     {
         transform.Find("Value").gameObject.GetComponent<TextMeshPro>().text = "" + value;
     }
+
+    public void Dispose()
+    {
+        Destroy(gameObject);
+    }
 }
