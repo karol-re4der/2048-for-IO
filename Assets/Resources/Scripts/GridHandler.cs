@@ -51,7 +51,7 @@ public class GridHandler : MonoBehaviour
         {
             Block newBlock = InstantiateBlock();
             newBlock.SetValue(value);
-            newBlock.transform.localScale = new Vector2(blockSize, blockSize);
+            newBlock.transform.localScale = new Vector3(blockSize, blockSize, blockSize);
             PositionBlock(newBlock, posX, posY);
             grid[posX, posY] = newBlock;
         }
@@ -124,7 +124,33 @@ public class GridHandler : MonoBehaviour
 
     public void MergeAll(int dirX, int dirY)
     {
+        for (int x = dirX < 0 ? 0 : grid.GetLength(0) - 1; x >= 0 && x < grid.GetLength(0); x -= dirX != 0 ? dirX : 1)
+        {
+            for (int y = dirY < 0 ? 0 : grid.GetLength(1) - 1; y >= 0 && y < grid.GetLength(1); y -= dirY != 0 ? dirY : 1)
 
+            {
+                //if (IsOccupied(x, y))
+                //{
+                //    Block block = At(x, y);
+                //    int orginalX = x;
+                //    int orginalY = y;
+                //    int distance = 1;
+
+                //    while (!IsOccupied(orginalX + dirX * -distance, orginalY + dirY * -distance))
+                //    {
+                //        int newX = orginalX + dirX * distance;
+                //        int newY = orginalY + dirY * distance;
+                //        int oldX = orginalX + dirX * (distance - 1);
+                //        int oldY = orginalY + dirY * (distance - 1);
+                //        distance++;
+
+                //        MoveBlock(oldX, oldY, newX, newY);
+                //        actionPerformed = true;
+                //    }
+
+                //}
+            }
+        }
     }
 
     public void SpawnBlock()
