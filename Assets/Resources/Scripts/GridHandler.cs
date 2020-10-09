@@ -8,12 +8,16 @@ public class GridHandler : MonoBehaviour
 
     public int sizeX, sizeY;
     public int blockSize, marginSize;
+    public bool actionPerformed;
 
     private Block[,] grid;
 
     void Start()
     {
         grid = new Block[sizeX, sizeY];
+        SpawnBlock();
+        SpawnBlock();
+        SpawnBlock();
     }
 
     public Block At(int posX, int posY)
@@ -110,6 +114,7 @@ public class GridHandler : MonoBehaviour
                         distance++;
 
                         MoveBlock(oldX, oldY, newX, newY);
+                        actionPerformed = true;
                     }
 
                 }
@@ -120,5 +125,23 @@ public class GridHandler : MonoBehaviour
     public void MergeAll(int dirX, int dirY)
     {
 
+    }
+
+    public void SpawnBlock()
+    {
+        if (SpacesRemaining() > 0)
+        {
+            int randVal = 1;
+            int randX = 0;
+            int randY = 0;
+
+            do
+            {
+                randX = UnityEngine.Random.Range(0, sizeX);
+                randY = UnityEngine.Random.Range(0, sizeY);
+            } while (IsOccupied(randX, randY));
+
+            NewBlock(randX, randY, randVal);
+        }
     }
 }

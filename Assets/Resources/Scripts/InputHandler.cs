@@ -7,23 +7,7 @@ public class InputHandler : MonoBehaviour
 {
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (GetComponent<GridHandler>().SpacesRemaining() > 0)
-            {
-                int randVal = 1;
-                int randX = 0;
-                int randY = 0;
-
-                do
-                {
-                    randX = UnityEngine.Random.Range(0, GetComponent<GridHandler>().sizeX);
-                    randY = UnityEngine.Random.Range(0, GetComponent<GridHandler>().sizeY);
-                } while (GetComponent<GridHandler>().IsOccupied(randX, randY));
-
-                GetComponent<GridHandler>().NewBlock(randX, randY, randVal);
-            }
-        }
+        GetComponent<GridHandler>().actionPerformed = false;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -44,6 +28,11 @@ public class InputHandler : MonoBehaviour
         {
             GetComponent<GridHandler>().MoveAll(0, -1);
             GetComponent<GridHandler>().MergeAll(0, -1);
+        }
+
+        if (GetComponent<GridHandler>().actionPerformed)
+        {
+            GetComponent<GridHandler>().SpawnBlock();
         }
     }
 }
