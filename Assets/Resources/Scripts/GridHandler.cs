@@ -55,15 +55,9 @@ public class GridHandler : MonoBehaviour
             Block newBlock = InstantiateBlock();
             newBlock.SetValue(value);
             newBlock.transform.localScale = new Vector3(blockSize, blockSize, blockSize);
-            PositionBlock(newBlock, posX, posY);
+            newBlock.PlaceAt(IndexToPos(posX, posY));
             grid[posX, posY] = newBlock;
         }
-    }
-
-    private void PositionBlock(Block block, int posX, int posY)
-    {
-        block.transform.position = IndexToPos(posX, posY);
-
     }
 
     private Vector2 IndexToPos(int x, int y)
@@ -89,9 +83,19 @@ public class GridHandler : MonoBehaviour
 
     private void MoveBlock(int oldX, int oldY, int newX, int newY)
     {
+        float mod = 0;
+        if (oldX != newX)
+        {
+            mod = Mathf.Abs(oldX - newX) / (float)sizeX;
+        }
+        else
+        {
+            mod = Mathf.Abs(oldY - newY) / (float)sizeY;
+        }
+
         grid[newX, newY] = grid[oldX, oldY];
         grid[oldX, oldY] = null;
-        PositionBlock(grid[newX, newY], newX, newY);
+        grid[newX, newY].MoveTo(IndexToPos(newX, newY), mod);
     }
 
     public void MoveAll(int dirX, int dirY)
@@ -104,6 +108,7 @@ public class GridHandler : MonoBehaviour
                 if (IsOnBoard(x, y) && IsOccupied(x, y))
                 {
                     Block block = At(x, y);
+                    block.speedMod = 0;
                     int orginalX = x;
                     int orginalY = y;
                     int distance = 1;
@@ -178,6 +183,7 @@ public class GridHandler : MonoBehaviour
             } while (IsOccupied(randX, randY));
 
             NewBlock(randX, randY, randVal);
+            grid[randX, randY].DelayAppearance();
         }
     }
 }
