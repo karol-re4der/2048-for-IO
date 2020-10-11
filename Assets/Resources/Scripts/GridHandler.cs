@@ -17,7 +17,6 @@ public class GridHandler : MonoBehaviour
         grid = new Block[sizeX, sizeY];
         SpawnBlock();
         SpawnBlock();
-        SpawnBlock();
     }
 
     public Block At(int posX, int posY)
@@ -81,21 +80,25 @@ public class GridHandler : MonoBehaviour
         return count;
     }
 
-    private void MoveBlock(int oldX, int oldY, int newX, int newY)
+    private void MoveBlock(int oldX, int oldY, int newX, int newY, bool replace = true, Block targetBlock = null)
     {
         float mod = 0;
         if (oldX != newX)
         {
-            mod = Mathf.Abs(oldX - newX) / (float)sizeX;
+            mod = Mathf.Abs(oldX - newX) / (float)(sizeX-1);
         }
         else
         {
-            mod = Mathf.Abs(oldY - newY) / (float)sizeY;
+            mod = Mathf.Abs(oldY - newY) / (float)(sizeY-1);
         }
 
-        grid[newX, newY] = grid[oldX, oldY];
+        if (replace)
+        {
+            grid[newX, newY] = grid[oldX, oldY];
+        }
+
+        grid[oldX, oldY].MoveTo(IndexToPos(newX, newY), mod, targetBlock:targetBlock);
         grid[oldX, oldY] = null;
-        grid[newX, newY].MoveTo(IndexToPos(newX, newY), mod);
     }
 
     public void MoveAll(int dirX, int dirY)
@@ -108,7 +111,6 @@ public class GridHandler : MonoBehaviour
                 if (IsOnBoard(x, y) && IsOccupied(x, y))
                 {
                     Block block = At(x, y);
-                    block.speedMod = 0;
                     int orginalX = x;
                     int orginalY = y;
                     int distance = 1;
@@ -153,8 +155,9 @@ public class GridHandler : MonoBehaviour
                             if (neighbour.value == block.value)
                             {
                                 block.DoubleValue();
+                                block.beingMergedInto = true;
                                 neighbour.Dispose();
-                                grid[neighbourX, neighbourY] = null;
+                                MoveBlock(neighbourX, neighbourY, x, y, replace:false, block);
                                 actionPerformed = true;
                             }
                             break;
@@ -183,6 +186,7 @@ public class GridHandler : MonoBehaviour
             } while (IsOccupied(randX, randY));
 
             NewBlock(randX, randY, randVal);
+            grid[randX, randY].Start();
             grid[randX, randY].DelayAppearance();
         }
     }

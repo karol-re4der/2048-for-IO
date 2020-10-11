@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5191348905608896324}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,6 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 0
+  speedMod: 0
+  beingMergedInto: 0
 --- !u!1 &8940881766807830857
 GameObject:
   m_ObjectHideFlags: 0

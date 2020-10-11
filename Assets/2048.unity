@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc27076eda50064ab6672250ac2eae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionLength: 0.5
 --- !u!114 &62669452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +168,7 @@ MonoBehaviour:
   sizeY: 4
   blockSize: 2
   marginSize: 1
+  actionPerformed: 0
 --- !u!4 &62669453
 Transform:
   m_ObjectHideFlags: 0
