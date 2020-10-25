@@ -230,7 +230,25 @@ public class GridHandler : MonoBehaviour
         {
             for (int y = 0; y < sizeY; y++)
             {
-
+                List<Vector2> directions = new List<Vector2>() { new Vector2(-1, 0), new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, -1), new Vector2(0, 1) };
+                foreach (Vector2 dir in directions) {
+                    for (int dist = 1; dir.y==0?(x+dir.x>=0 && x+dir.x<sizeX):(y + dir.y >= 0 && y + dir.y < sizeY); dist++)
+                    {
+                        Block block = grid[x + (int)dir.x * dist, y + (int)dir.y * dist];
+                        if (!block)
+                        {
+                            return false;
+                        }
+                        else if(block.value==grid[x, y].value)
+                        {
+                            return false;
+                        }
+                        else if (block.value != grid[x, y].value)
+                        {
+                            break;
+                        }
+                    } 
+                }
             }
         }
 
