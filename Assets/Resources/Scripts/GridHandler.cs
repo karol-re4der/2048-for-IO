@@ -9,6 +9,7 @@ public class GridHandler : MonoBehaviour
     public int sizeX, sizeY;
     public float blockSize, marginSize;
     public bool actionPerformed;
+    public int targetValue;
 
     private Block[,] grid;
     private float gridResolution;
@@ -75,20 +76,19 @@ public class GridHandler : MonoBehaviour
         return new Vector2(blockSize/2 + x * blockSize + x * marginSize + marginSize, blockSize / 2 + y * blockSize + y * marginSize + marginSize);
     }
 
-    public int SpacesRemaining()
+    public bool SpaceRemaining()
     {
-        int count = 0;
-        for(int x = 0; x<grid.GetLength(0); x++)
+        for (int x = 0; x < sizeX; x++)
         {
-            for(int y = 0; y<grid.GetLength(1); y++)
+            for (int y = 0; y < sizeY; y++)
             {
-                if(!IsOccupied(x, y))
+                if (grid[x, y] == null)
                 {
-                    count++;
+                    return true;
                 }
             }
         }
-        return count;
+        return false;
     }
 
     private void MoveBlock(int oldX, int oldY, int newX, int newY, bool replace = true, Block targetBlock = null)
@@ -184,7 +184,7 @@ public class GridHandler : MonoBehaviour
 
     public void SpawnBlock()
     {
-        if (SpacesRemaining() > 0)
+        if (SpaceRemaining())
         {
             int randVal = 1;
             int randX = 0;
@@ -200,5 +200,52 @@ public class GridHandler : MonoBehaviour
             grid[randX, randY].Start();
             grid[randX, randY].DelayAppearance();
         }
+    }
+
+    public void ResetGrid()
+    {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Block"))
+        {
+            Destroy(obj);
+        }
+        Start();
+    }
+
+    public bool IsGameOver()
+    {
+        //no space remaining
+        for(int x = 0; x<sizeX; x++)
+        {
+            for(int y = 0; y<sizeY; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    return false;
+                }
+            }
+        }
+
+        //no moves remaining
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+
+            }
+        }
+
+        return true;
+    }
+
+    public bool IsGameWon()
+    {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Block"))
+        {
+            if (obj.GetComponent<Block>().value == targetValue)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

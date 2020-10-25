@@ -78,7 +78,6 @@ public class Block : MonoBehaviour
             case 2:
                 ColorUtility.TryParseHtmlString("#ece4db", out newBlockColor);
                 ColorUtility.TryParseHtmlString("#756e66", out newTextColor);
-
                 break;
             case 4:
                 ColorUtility.TryParseHtmlString("#ece2d0", out newBlockColor);

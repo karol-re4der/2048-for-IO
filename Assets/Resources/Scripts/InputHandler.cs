@@ -15,92 +15,98 @@ public class InputHandler : MonoBehaviour
 
     void Update() 
     {
-        if (GameOverConditionsMet())
+        if (!GameObject.Find("Canvas/Popup").GetComponent<PopupHandler>().IsOn())
         {
-
-        }
-
-        if (!Application.isEditor)
-        {
-            if (Input.touches.Length == 1)
+            if (!Application.isEditor)
             {
-                if (Input.touches[0].phase == TouchPhase.Began)
+                if (Input.touches.Length == 1)
                 {
-                    touchPivot = Input.touches[0].position;
-                }
-                else if (Input.touches[0].phase == TouchPhase.Ended)
-                {
-                    float xShift = touchPivot.x - Input.touches[0].position.x;
-                    float yShift = touchPivot.y - Input.touches[0].position.y;
-                    if (Mathf.Abs(xShift) > Mathf.Abs(yShift))
+                    if (Input.touches[0].phase == TouchPhase.Began)
                     {
-                        if (xShift > 0)
-                        {
-                            actionQueue.Add(new Vector2(-1, 0));
-                        }
-                        else if (xShift < 0)
-                        {
-                            actionQueue.Add(new Vector2(1, 0));
-                        }
+                        touchPivot = Input.touches[0].position;
                     }
-                    else if (Mathf.Abs(xShift) < Mathf.Abs(yShift))
+                    else if (Input.touches[0].phase == TouchPhase.Ended)
                     {
-                        if (yShift > 0)
+                        float xShift = touchPivot.x - Input.touches[0].position.x;
+                        float yShift = touchPivot.y - Input.touches[0].position.y;
+                        if (Mathf.Abs(xShift) > Mathf.Abs(yShift))
                         {
-                            actionQueue.Add(new Vector2(0, -1));
+                            if (xShift > 0)
+                            {
+                                actionQueue.Add(new Vector2(-1, 0));
+                            }
+                            else if (xShift < 0)
+                            {
+                                actionQueue.Add(new Vector2(1, 0));
+                            }
                         }
-                        else if (yShift < 0)
+                        else if (Mathf.Abs(xShift) < Mathf.Abs(yShift))
                         {
-                            actionQueue.Add(new Vector2(0, 1));
+                            if (yShift > 0)
+                            {
+                                actionQueue.Add(new Vector2(0, -1));
+                            }
+                            else if (yShift < 0)
+                            {
+                                actionQueue.Add(new Vector2(0, 1));
+                            }
                         }
+                        GameObject.Find("Canvas/DebugText").GetComponent<TextMeshProUGUI>().text += "\n" + xShift + " " + yShift;
                     }
-                    GameObject.Find("Canvas/DebugText").GetComponent<TextMeshProUGUI>().text += "\n"+xShift + " " + yShift;
                 }
             }
-        }
-        else
-        {
-            if (actionQueue.Count() < maxActions)
+            else
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (actionQueue.Count() < maxActions)
                 {
-                    actionQueue.Add(new Vector2(-1, 0));
-                }
-                else if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    actionQueue.Add(new Vector2(1, 0));
+                    if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        actionQueue.Add(new Vector2(-1, 0));
+                    }
+                    else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        actionQueue.Add(new Vector2(1, 0));
 
-                }
-                else if (Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    actionQueue.Add(new Vector2(0, 1));
+                    }
+                    else if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        actionQueue.Add(new Vector2(0, 1));
 
-                }
-                else if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    actionQueue.Add(new Vector2(0, -1));
+                    }
+                    else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        actionQueue.Add(new Vector2(0, -1));
+                    }
                 }
             }
         }
 
         if (!ActionInProgress() && actionQueue.Count() > 0)
         {
-            GetComponent<GridHandler>().actionPerformed = false;
-
-            GetComponent<GridHandler>().MergeAll((int)actionQueue.First().x, (int)actionQueue.First().y);
-            GetComponent<GridHandler>().MoveAll((int)actionQueue.First().x, (int)actionQueue.First().y);
-            actionQueue.RemoveAt(0);
-
-            if (GetComponent<GridHandler>().actionPerformed)
+            if (!GameObject.Find("Grid").GetComponent<GridHandler>().IsGameOver())
             {
-                GetComponent<GridHandler>().SpawnBlock();
+                GetComponent<GridHandler>().actionPerformed = false;
+
+                GetComponent<GridHandler>().MergeAll((int)actionQueue.First().x, (int)actionQueue.First().y);
+                GetComponent<GridHandler>().MoveAll((int)actionQueue.First().x, (int)actionQueue.First().y);
+                actionQueue.RemoveAt(0);
+
+                if (GetComponent<GridHandler>().IsGameWon())
+                {
+                    actionQueue.Clear();
+                    GameObject.Find("Canvas/Popup").GetComponent<PopupHandler>().Enter("Game Won!");
+                }
+                else if (GetComponent<GridHandler>().actionPerformed)
+                {
+                    GetComponent<GridHandler>().SpawnBlock();
+                }
+            }
+            else
+            {
+                actionQueue.Clear();
+                GameObject.Find("Canvas/Popup").GetComponent<PopupHandler>().Enter("Game over...");
             }
         }
-    }
-
-    public bool GameOverConditionsMet()
-    {
-        return false;
     }
 
     public bool ActionInProgress()
