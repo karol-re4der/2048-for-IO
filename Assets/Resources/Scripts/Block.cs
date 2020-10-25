@@ -71,6 +71,49 @@ public class Block : MonoBehaviour
     public void RefreshTexture()
     {
         transform.Find("Value").gameObject.GetComponent<TextMeshPro>().text = "" + value;
+        Color newBlockColor = Color.white;
+        Color newTextColor = Color.white;
+        switch (value)
+        {
+            case 2:
+                ColorUtility.TryParseHtmlString("#ece4db", out newBlockColor);
+                ColorUtility.TryParseHtmlString("#756e66", out newTextColor);
+
+                break;
+            case 4:
+                ColorUtility.TryParseHtmlString("#ece2d0", out newBlockColor);
+                ColorUtility.TryParseHtmlString("#756e66", out newTextColor);
+                break;
+            case 8:
+                ColorUtility.TryParseHtmlString("#e9b485", out newBlockColor);
+                break;
+            case 16:
+                ColorUtility.TryParseHtmlString("#e99b73", out newBlockColor);
+                break;
+            case 32:
+                ColorUtility.TryParseHtmlString("#e7846e", out newBlockColor);
+                break;
+            case 64:
+                ColorUtility.TryParseHtmlString("#e56b51", out newBlockColor);
+                break;
+            case 128:
+                ColorUtility.TryParseHtmlString("#ead698", out newBlockColor);
+                break;
+            case 256:
+                ColorUtility.TryParseHtmlString("#e9d48e", out newBlockColor);
+                break;
+            case 512:
+                ColorUtility.TryParseHtmlString("#f0d571", out newBlockColor);
+                break;
+            case 1024:
+                ColorUtility.TryParseHtmlString("#e7ce79", out newBlockColor);
+                break;
+            case 2048:
+                ColorUtility.TryParseHtmlString("#e5c542", out newBlockColor);
+                break;
+        }
+        GetComponent<Renderer>().material.color = newBlockColor;
+        transform.Find("Value").gameObject.GetComponent<TextMeshPro>().color = newTextColor;
     }
 
     public void Dispose()

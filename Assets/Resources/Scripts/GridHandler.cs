@@ -16,9 +16,15 @@ public class GridHandler : MonoBehaviour
     void Start()
     {
         Camera.main.orthographicSize = (sizeX*blockSize+(sizeX+1)*marginSize) / (2f * Camera.main.aspect);
-        //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x / 2, Camera.main.transform.position.y / 2, -10);
-        //blockSize = (float)Camera.main.orthographicSize/sizeX;
-        //marginSize = 0f;
+
+        transform.Find("Background").position = new Vector3(5f, 5f, 5f);
+
+        Color newColor = Color.white;
+        ColorUtility.TryParseHtmlString("#a69384", out newColor);
+        transform.Find("Background").GetComponent<Renderer>().material.color = newColor;
+
+
+
         grid = new Block[sizeX, sizeY];
         SpawnBlock();
         SpawnBlock();
