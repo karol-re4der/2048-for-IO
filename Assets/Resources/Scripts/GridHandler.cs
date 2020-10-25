@@ -7,13 +7,18 @@ public class GridHandler : MonoBehaviour
 {
 
     public int sizeX, sizeY;
-    public int blockSize, marginSize;
+    public float blockSize, marginSize;
     public bool actionPerformed;
 
     private Block[,] grid;
+    private float gridResolution;
 
     void Start()
     {
+        Camera.main.orthographicSize = (sizeX*blockSize+(sizeX+1)*marginSize) / (2f * Camera.main.aspect);
+        //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x / 2, Camera.main.transform.position.y / 2, -10);
+        //blockSize = (float)Camera.main.orthographicSize/sizeX;
+        //marginSize = 0f;
         grid = new Block[sizeX, sizeY];
         SpawnBlock();
         SpawnBlock();
@@ -61,7 +66,7 @@ public class GridHandler : MonoBehaviour
 
     private Vector2 IndexToPos(int x, int y)
     {
-        return new Vector2(x * blockSize + x * marginSize, y * blockSize + y * marginSize);
+        return new Vector2(blockSize/2 + x * blockSize + x * marginSize + marginSize, blockSize / 2 + y * blockSize + y * marginSize + marginSize);
     }
 
     public int SpacesRemaining()
