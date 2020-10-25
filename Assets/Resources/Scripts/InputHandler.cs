@@ -12,6 +12,7 @@ public class InputHandler : MonoBehaviour
     public int maxActions;
 
     private Vector2 touchPivot;
+    private bool touchActionPerformed = false;
 
     void Update() 
     {
@@ -24,34 +25,50 @@ public class InputHandler : MonoBehaviour
                     if (Input.touches[0].phase == TouchPhase.Began)
                     {
                         touchPivot = Input.touches[0].position;
+                        touchActionPerformed = false;
                     }
-                    else if (Input.touches[0].phase == TouchPhase.Ended)
+                    else if (Input.touches[0].phase == TouchPhase.Moved)
                     {
-                        float xShift = touchPivot.x - Input.touches[0].position.x;
-                        float yShift = touchPivot.y - Input.touches[0].position.y;
-                        if (Mathf.Abs(xShift) > Mathf.Abs(yShift))
+                        if (!touchActionPerformed)
                         {
-                            if (xShift > 0)
+                            float xShift = touchPivot.x - Input.touches[0].position.x;
+                            float yShift = touchPivot.y - Input.touches[0].position.y;
+
+                            if (Mathf.Abs(xShift) < Screen.width / 4)
                             {
-                                actionQueue.Add(new Vector2(-1, 0));
+                                xShift = 0;
                             }
-                            else if (xShift < 0)
+                            if(Mathf.Abs(yShift) < Screen.width / 4)
                             {
-                                actionQueue.Add(new Vector2(1, 0));
+                                yShift = 0;
                             }
+
+                            if (Mathf.Abs(xShift) > Mathf.Abs(yShift))
+                            {
+                                if (xShift > 0)
+                                {
+                                    actionQueue.Add(new Vector2(-1, 0));
+                                }
+                                else if (xShift < 0)
+                                {
+                                    actionQueue.Add(new Vector2(1, 0));
+                                }
+                                touchActionPerformed = true;
+                            }
+                            else if (Mathf.Abs(xShift) < Mathf.Abs(yShift))
+                            {
+                                if (yShift > 0)
+                                {
+                                    actionQueue.Add(new Vector2(0, -1));
+                                }
+                                else if (yShift < 0)
+                                {
+                                    actionQueue.Add(new Vector2(0, 1));
+                                }
+                                touchActionPerformed = true;
+                            }
+                            GameObject.Find("Canvas/DebugText").GetComponent<TextMeshProUGUI>().text += "\n" + xShift + " " + yShift;
                         }
-                        else if (Mathf.Abs(xShift) < Mathf.Abs(yShift))
-                        {
-                            if (yShift > 0)
-                            {
-                                actionQueue.Add(new Vector2(0, -1));
-                            }
-                            else if (yShift < 0)
-                            {
-                                actionQueue.Add(new Vector2(0, 1));
-                            }
-                        }
-                        GameObject.Find("Canvas/DebugText").GetComponent<TextMeshProUGUI>().text += "\n" + xShift + " " + yShift;
                     }
                 }
             }

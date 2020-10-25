@@ -27,8 +27,8 @@ public class GridHandler : MonoBehaviour
 
 
         grid = new Block[sizeX, sizeY];
-        SpawnBlock();
-        SpawnBlock();
+        SpawnBlock(delay: false);
+        SpawnBlock(delay: false);
     }
 
     public Block At(int posX, int posY)
@@ -182,7 +182,7 @@ public class GridHandler : MonoBehaviour
         }
     }
 
-    public void SpawnBlock()
+    public void SpawnBlock(bool delay = true)
     {
         if (SpaceRemaining())
         {
@@ -198,7 +198,10 @@ public class GridHandler : MonoBehaviour
 
             NewBlock(randX, randY, randVal);
             grid[randX, randY].Start();
-            grid[randX, randY].DelayAppearance();
+            if (delay)
+            {
+                grid[randX, randY].DelayAppearance();
+            }
         }
     }
 
