@@ -186,9 +186,14 @@ public class GridHandler : MonoBehaviour
     {
         if (SpaceRemaining())
         {
-            int randVal = 1;
+            int randVal = 2;
             int randX = 0;
             int randY = 0;
+
+            if (UnityEngine.Random.Range(0, 1f) <= 0.2f) 
+            {
+                randVal = 4;
+            }
 
             do
             {

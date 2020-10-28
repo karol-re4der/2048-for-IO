@@ -19,7 +19,10 @@ public class Block : MonoBehaviour
     public void Start()
     {
         secondsPerTurn = GameObject.Find("Grid").GetComponent<InputHandler>().actionLength;
-        value = 2;
+        if (value == 0)
+        {
+            value = 2;
+        }
         speedMod = 0;
         RefreshTexture();
     }

@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc27076eda50064ab6672250ac2eae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionLength: 0.25
+  actionLength: 0.2
   maxActions: 3
 --- !u!114 &62669452
 MonoBehaviour:
@@ -243,6 +243,7 @@ MonoBehaviour:
   blockSize: 2
   marginSize: 0.4
   actionPerformed: 0
+  targetValue: 2048
 --- !u!4 &62669453
 Transform:
   m_ObjectHideFlags: 0
@@ -374,6 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d6a065085cd36e4aae378b126cbe301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startsActive: 0
 --- !u!1 &330431831
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +471,7 @@ GameObject:
   - component: {fileID: 430855334}
   - component: {fileID: 430855333}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -714,12 +716,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 224969361}
-        m_MethodName: 
+      - m_Target: {fileID: 224969363}
+        m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

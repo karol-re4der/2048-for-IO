@@ -34,11 +34,11 @@ public class InputHandler : MonoBehaviour
                             float xShift = touchPivot.x - Input.touches[0].position.x;
                             float yShift = touchPivot.y - Input.touches[0].position.y;
 
-                            if (Mathf.Abs(xShift) < Screen.width / 4)
+                            if (Mathf.Abs(xShift) < Screen.width / 10)
                             {
                                 xShift = 0;
                             }
-                            if(Mathf.Abs(yShift) < Screen.width / 4)
+                            if(Mathf.Abs(yShift) < Screen.width / 10)
                             {
                                 yShift = 0;
                             }
