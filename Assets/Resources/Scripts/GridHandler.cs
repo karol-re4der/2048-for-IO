@@ -10,11 +10,12 @@ public class GridHandler : MonoBehaviour
     public float blockSize, marginSize;
     public bool actionPerformed;
     public int targetValue;
+    public bool isTestSetup;
 
     private Block[,] grid;
     private float gridResolution;
 
-    void Start()
+    public void Start()
     {
         Camera.main.orthographicSize = (sizeX*blockSize+(sizeX+1)*marginSize) / (2f * Camera.main.aspect);
 
@@ -27,8 +28,12 @@ public class GridHandler : MonoBehaviour
 
 
         grid = new Block[sizeX, sizeY];
-        SpawnBlock(delay: false);
-        SpawnBlock(delay: false);
+
+        if (!isTestSetup)
+        {
+            SpawnBlock(delay: false);
+            SpawnBlock(delay: false);
+        }
     }
 
     public Block At(int posX, int posY)
